@@ -1,3 +1,4 @@
+var PLACE = require("Constant").PLACE;
 var App = cc.Class({
 
     properties: {
@@ -7,8 +8,17 @@ var App = cc.Class({
         roomSocket:{
             default:{}
         },
-        playerName:""
+        place:{
+            type:PLACE,
+            default:PLACE.HOME
+        },
+        playerName:"",
+        oppoName:""  //对手姓名
     },
+
+    ctor(){
+
+    }
 
 });
 
