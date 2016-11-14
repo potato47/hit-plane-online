@@ -1,3 +1,5 @@
+var Constant = require("Constant");
+var PLACE = Constant.PLACE;
 cc.Class({
     extends: cc.Component,
 
@@ -8,9 +10,9 @@ cc.Class({
     // use this for initialization
     onLoad: function () {
         let self = this;
-        app.globalSocket.on('selectRoom',function(msg){
-            self.label.string += "\n"+msg["playerName"]+"selected"+msg["roomId"];
-        });
+        // app.globalSocket.on('selectRoom',function(msg){
+        //     self.label.string += "\n"+msg["playerName"]+"selected"+msg["roomId"];
+        // });
 
     },
 
@@ -18,7 +20,12 @@ cc.Class({
         app.globalSocket.emit('selectRoom','room1');
         app.roomSocket = io.connect("127.0.0.1:3000/room1");
         app.roomSocket.on('assign place',function(msg){
-            app.place = msg;
+            if(msg===1){
+                app.place = PLACE.HOME;
+            }
+            if(msg===2){
+                app.place = PLACE.VISITING;
+            }
             cc.log(app.place);
             cc.director.loadScene("Game");
         });

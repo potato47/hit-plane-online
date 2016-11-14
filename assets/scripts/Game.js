@@ -6,7 +6,6 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        turn:PLACE.HOME,
         colNum:0,
         rowNum:0,
         tiles:[],
@@ -16,6 +15,7 @@ cc.Class({
 
     // use this for initialization
     onLoad: function () {
+        this.turn = PLACE.HOME;
         this.tileWidth = this.tilesLayout.width/this.colNum;
          for(let y=0;y<this.rowNum;y++){
             for(let x=0;x<this.colNum;x++){
@@ -30,11 +30,11 @@ cc.Class({
             }
         }
         let self = this;
-        app.homeSocket.on('change turn',function(msg){
+        app.roomSocket.on('change turn',function(msg){
             self.turn = -self.turn;
         });
-        app.homeSocket.on('click tile',function(msg){
-            this.tiles[tag].getComponent("Tile").state = STATE.SHOW;
+        app.roomSocket.on('click tile',function(msg){
+            self.tiles[msg].getComponent("Tile").state = STATE.SHOW;
         });
     },
 
@@ -44,8 +44,8 @@ cc.Class({
             if(self.turn === app.place && tile.getComponent("Tile").state === STATE.HIDE){
                 self.turn = -self.turn;
                 tile.getComponent("Tile").state = STATE.SHOW;
-                app.homeSocket.emit('change turn');
-                app.homeSocket.emit('click tile',tile.tag);
+                app.roomSocket.emit('change turn');
+                app.roomSocket.emit('click tile',tile.tag);
             }
         });
     }
